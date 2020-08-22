@@ -24,13 +24,39 @@ document.getElementById('clockme').addEventListener('submit', submitForm);
 function submitForm(e){
     e.preventDefault();
  
+
+
   // get value
   var passno = getInputVal('passno');
   var name = getInputVal('name');
+  
    
   var d = new Date();
   var cdate = d.toLocaleString(); 
   
+//function that gets the location and returns it
+function getLocation() {
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    console.log("Geo Location not supported by browser");
+  }
+}
+//function that retrieves the position
+function showPosition(position) {
+  var loc = {
+    longitude: position.coords.longitude,
+    latitude: position.coords.latitude
+  }
+  console.log(loc)
+}
+//request for location
+getLocation();
+
+var loc=document.getElementById("loc").value;
+localStorage.setItem('loc1', loc);
+
+
   // Save Message
   saveMessage(passno,name,cdate);
 
@@ -61,26 +87,10 @@ var onComplete = function(error) {
   }
 };
 
-//function that gets the location and returns it
-function getLocation() {
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  } else {
-    console.log("Geo Location not supported by browser");
-  }
-}
-//function that retrieves the position
-function showPosition(position) {
-  var location = {
-    longitude: position.coords.longitude,
-    latitude: position.coords.latitude
-  }
-  console.log(location)
-}
-//request for location
-getLocation();
 
+  
 
+ 
 
 
 //Save messages to firebase
@@ -90,6 +100,7 @@ function saveMessage(passno,name,cdate){
     passno: passno,
       name: name,
         cdate: cdate,
+ 
         }, onComplete);
      
         location.replace("form_submit.html");
